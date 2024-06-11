@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "DishDash",
+    "slug": "dishdash",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/applogo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/dishdashbg.jpg",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/applogo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.pkddeveloper.DishDash"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "1cdfe06f-f4ae-4283-8330-508b0c2b82a2"
+      }
+    },
+    "owner": "pkddeveloper"
+  }
+}

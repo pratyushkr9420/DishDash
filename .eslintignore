@@ -1,0 +1,10 @@
+/.expo
+node_modules/**
+package.json
+package-lock.json
+assets/**
+.vscode
+.expo-shared
+.prettirrc
+.eslintrc.js
+
