@@ -1,16 +1,27 @@
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RouteProp } from '@react-navigation/native';
 import React, { FC } from 'react';
 import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
-import { RestaurantsNavigatorParams } from '../../../utils/types';
+import { useCartContext } from '../../../services/cart/cart.context';
+import {
+  RestaurantsNavigatorParams,
+  RootStackParamList,
+} from '../../../utils/types';
 import RestaurantInfoCard from '../components/RestaurantInfoCard';
+import { StyledOrderButton } from './RestaurantDisplayScreen.styles';
 
 type RestaurantDetailScreenProps = {
   route: RouteProp<RestaurantsNavigatorParams, 'RestaurantDetail'>;
+  navigation: BottomTabNavigationProp<RootStackParamList, 'Restaurants'>;
 };
 
-const RestaurantDetailScreen: FC<RestaurantDetailScreenProps> = ({ route }) => {
+const RestaurantDetailScreen: FC<RestaurantDetailScreenProps> = ({
+  route,
+  navigation,
+}) => {
   const restaurant = route.params!.restaurant;
+  const { addToCart } = useCartContext();
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <RestaurantInfoCard restaurant={restaurant} />
@@ -59,6 +70,14 @@ const RestaurantDetailScreen: FC<RestaurantDetailScreenProps> = ({ route }) => {
           </List.Accordion>
         </List.AccordionGroup>
       </ScrollView>
+      <StyledOrderButton
+        onPress={() => {
+          addToCart({ name: 'special', price: 1099 }, restaurant);
+          navigation.navigate('Checkout');
+        }}
+      >
+        Order special for $ 10.99
+      </StyledOrderButton>
     </View>
   );
 };

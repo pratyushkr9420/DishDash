@@ -16,7 +16,7 @@ const RestaurantRating: FC<RestaurantRatingProps> = ({ rating }) => {
   const newArray = new Array(Math.floor(rating)).fill(0);
   return (
     <StyledRatingView>
-      {newArray.map((item, index) => (
+      {[0, 0, 0, 0, 0].map((item, index) => (
         <SvgXml width={22} height={22} xml={star} key={index} />
       ))}
     </StyledRatingView>

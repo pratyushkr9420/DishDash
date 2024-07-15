@@ -13,6 +13,7 @@ type LocationContextType = {
   location: LatLng;
   keyword: string;
   searchLocation: (searchTerm: string) => void;
+  locationError: Error | null;
 };
 
 const LocationContext = createContext<LocationContextType | undefined>(
@@ -58,6 +59,7 @@ function LocationProvider({ children }: { children: ReactNode }): ReactElement {
         const searchLocation = locationTransformData(data);
         setLocation(searchLocation);
         setIsLoading(false);
+        setError(null);
       })
       .catch((error) => {
         setError(error);
@@ -74,6 +76,7 @@ function LocationProvider({ children }: { children: ReactNode }): ReactElement {
         location,
         keyword,
         searchLocation,
+        locationError: error,
       }}
     >
       {children}

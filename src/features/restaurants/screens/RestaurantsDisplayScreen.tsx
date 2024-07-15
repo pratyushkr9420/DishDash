@@ -6,7 +6,9 @@ import {
   StyledCenteredView,
   StyledSafeAreaView,
 } from '../../../components/StyledComponents';
+import { Text } from '../../../components/TextComponent';
 import { useFavoritesContext } from '../../../services/favorites/favorites.context';
+import { useLocationContext } from '../../../services/location/location.context';
 import { useRestaurantsContext } from '../../../services/restaurants/restaurant.context';
 import {
   RestaurantInfo,
@@ -27,10 +29,12 @@ type RestaurantsDisplayScreenProps = {
 const RestaurantDisplayScreen: FC<RestaurantsDisplayScreenProps> = ({
   navigation,
 }) => {
-  const { restaurants, isLoading } = useRestaurantsContext();
+  const { restaurants, isLoading, restaurantError } = useRestaurantsContext();
+  const { locationError } = useLocationContext();
   const { favorites } = useFavoritesContext();
   const [favoritesVisible, setFavoritesVisible] = useState<boolean>(false);
   const toggleFavorites = () => setFavoritesVisible(!favoritesVisible);
+  const hasretrievalErrors = !!locationError || !!restaurantError;
   if (isLoading) {
     return (
       <StyledCenteredView>
@@ -51,22 +55,28 @@ const RestaurantDisplayScreen: FC<RestaurantsDisplayScreenProps> = ({
       {favoritesVisible && favorites.length !== 0 && (
         <FavoritesList favorites={favorites} navigation={navigation} />
       )}
-      <StyledFlatList
-        data={restaurants}
-        renderItem={({ item }: { item: RestaurantInfo }) => {
-          return (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('RestaurantDetail', { restaurant: item })
-              }
-            >
-              <RestaurantInfoCard restaurant={item} />
-            </TouchableOpacity>
-          );
-        }}
-        keyExtractor={(item: RestaurantInfo) => item.name}
-        showsVerticalScrollIndicator={false}
-      />
+      {hasretrievalErrors ? (
+        <StyledCenteredView>
+          <Text variant="error">Error occured while fetching data</Text>
+        </StyledCenteredView>
+      ) : (
+        <StyledFlatList
+          data={restaurants}
+          renderItem={({ item }: { item: RestaurantInfo }) => {
+            return (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('RestaurantDetail', { restaurant: item })
+                }
+              >
+                <RestaurantInfoCard restaurant={item} />
+              </TouchableOpacity>
+            );
+          }}
+          keyExtractor={(item: RestaurantInfo) => item.name}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </StyledSafeAreaView>
   );
 };

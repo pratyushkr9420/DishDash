@@ -4,6 +4,7 @@ import { DefaultTheme } from 'styled-components/native';
 
 export type RootStackParamList = {
   Restaurants: NavigatorScreenParams<RestaurantsNavigatorParams>;
+  Checkout: undefined;
   Maps: undefined;
   Settings: undefined;
 };
@@ -23,6 +24,12 @@ export type LoginNavigatorParams = {
   Main: undefined;
   Login: undefined;
   Register: undefined;
+};
+
+export type CheckoutNavigatorParams = {
+  CheckoutScreen: undefined;
+  CheckoutErrorScreen: { error: string } | undefined;
+  CheckoutSuccessScreen: undefined;
 };
 
 declare module 'styled-components/native' {
@@ -148,7 +155,7 @@ type Place = {
   user_ratings_total?: number;
   vicinity: string;
 };
-type Photo = {
+export type Photo = {
   height: number;
   html_attributions: string[];
   photo_reference: string;
@@ -192,4 +199,14 @@ export type LocationData = {
 
 export type Locations = {
   [city: string]: LocationData;
+};
+
+export type cartItem = {
+  item: string;
+  price: number;
+  restaurantName: string;
+  placeId: string;
+  orderDate: string;
+  orderTime: string;
+  restaurant: RestaurantInfo;
 };

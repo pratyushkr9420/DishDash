@@ -36,3 +36,12 @@ yarn-error.*
 
 # Environment variables
 .env
+
+*/node_modules/**/*
+
+# firebase
+
+firebaseConfig.ts
+firebase.json
+.firebaserc
+functions/

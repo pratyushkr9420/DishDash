@@ -1,5 +1,7 @@
 import { RestaurantInfo } from './types';
 
+export const isProduction = false;
+
 export const mockRestaurant: RestaurantInfo = {
   name: 'My Restaurant',
   icon: 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png',
@@ -10,4 +12,11 @@ export const mockRestaurant: RestaurantInfo = {
   isOpenNow: true,
   rating: 4.5,
   isClosedTemporarily: true,
+  geometry: {
+    location: {
+      lat: 51.2132707,
+      lng: 4.4168305,
+    },
+  },
+  placeId: 'some place id 1',
 };

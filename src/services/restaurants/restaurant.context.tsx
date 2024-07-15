@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { isProduction } from '../../utils';
 import { RestaurantInfo } from '../../utils/types';
 import { useLocationContext } from '../location/location.context';
 import { mockImages } from './mock';
@@ -17,6 +18,7 @@ import {
 type RestaurantsContextType = {
   restaurants: RestaurantInfo[];
   isLoading: boolean;
+  restaurantError: Error | null;
 };
 
 const RestaurantsContext = createContext<RestaurantsContextType | undefined>(
@@ -48,37 +50,38 @@ function RestaurantsProvider({
       : '41.878113,-87.629799';
     setIsLoading(true);
     setRestaurants([]);
-    setTimeout(() => {
-      try {
-        fetchRestaurants(formattedLocation).then((data) => {
-          const results: any = restaurantsDataTransform(data);
-          const restaurants: RestaurantInfo[] = results.map((result: any) => {
-            return {
-              name: result.name,
-              icon: result.icon,
-              photos: result.photos.map((photo: any) => {
-                return mockImages[
-                  Math.floor(Math.random() * mockImages.length)
-                ];
-              }),
-              address: result.vicinity,
-              isOpenNow: result.isOpenNow,
-              rating: result.rating,
-              isClosedTemporarily: result.isClosedTemporarily,
-              placeId: result.placeId,
-              geometry: {
-                location: result.geometry.location,
-              },
-            };
-          });
-          setRestaurants(restaurants);
-          setIsLoading(false);
+    try {
+      fetchRestaurants(formattedLocation).then((data) => {
+        const results: any = restaurantsDataTransform(data);
+        const restaurants: RestaurantInfo[] = results.map((result: any) => {
+          return {
+            name: result.name,
+            icon: result.icon,
+            photos: !isProduction
+              ? result.photos.map((photo: any) => {
+                  return mockImages[
+                    Math.floor(Math.random() * mockImages.length)
+                  ];
+                })
+              : result.photos,
+            address: result.vicinity,
+            isOpenNow: result.isOpenNow,
+            rating: result.rating,
+            isClosedTemporarily: result.isClosedTemporarily,
+            placeId: result.placeId,
+            geometry: {
+              location: result.geometry.location,
+            },
+          };
         });
-      } catch (err) {
-        setError(err);
+        setRestaurants(restaurants);
+        setError(null);
         setIsLoading(false);
-      }
-    }, 2000);
+      });
+    } catch (err) {
+      setError(err);
+      setIsLoading(false);
+    }
   };
   useEffect(() => {
     retriveRestaurants();
@@ -88,6 +91,7 @@ function RestaurantsProvider({
       value={{
         restaurants,
         isLoading,
+        restaurantError: error,
       }}
     >
       {children}
