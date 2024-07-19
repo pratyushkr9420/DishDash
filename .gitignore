@@ -44,4 +44,3 @@ yarn-error.*
 firebaseConfig.ts
 firebase.json
 .firebaserc
-functions/
